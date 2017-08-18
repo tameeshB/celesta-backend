@@ -1,6 +1,7 @@
 <?php
 include 'dbConfig.php';
 include 'render/checkAccess.php';
+include 'render/log.php';
 function SQLInjFilter(&$unfilteredString){
 		$unfilteredString = mb_convert_encoding($unfilteredString, 'UTF-8', 'UTF-8');
 		$unfilteredString = htmlentities($unfilteredString, ENT_QUOTES, 'UTF-8');
@@ -56,6 +57,7 @@ if($status!=400){
 	    	//error to fetch result
 	    	$status = 400;
 	    	$error = "error to fetch result ".mysqli_errorno($link);
+		errorLog(mysqli_errorno($link)." ".mysqli_error($link));
 	    }
 	if(mysqli_errno($link)==1062){
 		$status = 409;
@@ -66,6 +68,7 @@ if($status!=400){
     	$status = 500;
     	$error = "error connecting to DB";
 	$error.=   "Debugging errno: " . mysqli_connect_errno();
+	errorLog(mysqli_errorno($link)." ".mysqli_error($link));
     }
 }
 // $status=200;
@@ -75,7 +78,8 @@ if($status == 200){
 	$ret["message"] = $return;
 }else{
 	$ret["status"] = $status;
-	$ret["message"] = $error;
+	$ret["message"] = $error ." For help, error reference no: $errRef";
+	errorLog($error)
 }
 //$ret['deb']=$_POST['deb'];
 //$data_back = json_decode(file_get_contents('php://input'));

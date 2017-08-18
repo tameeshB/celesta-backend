@@ -1,5 +1,6 @@
 <?php
 include 'dbConfig.php';
+include 'render/log.php';
 include 'render/checkAccess.php';
 function SQLInjFilter(&$unfilteredString){
 	$unfilteredString = mb_convert_encoding($unfilteredString, 'UTF-8', 'UTF-8');
@@ -29,23 +30,28 @@ if($status!=400){
 	    if(!$result || mysqli_num_rows($result)<1){
 	    	$status=403;
 	    	$return="Invalid credentials. Access Forbidden.";
+		errorLog(mysqli_errorno($link)." ".mysqli_error($link));
 	    } else {
 	    	while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
 	    		if($row['pswd']==sha1($_POST['password'])){
 	    			$status=200;
 	    			$return="Welcome ".$row['name'];
 				$uID=$row['regID'];
+				$_SESSION['uid']=$uID;
+				$_SESSION['name'] = $row['name'];
 	    			//set sessionID etc etc...
 	    		}else{
 	    			$status=403;
 	    			$return="Invalid credentials. Access Forbidden.";	
-	    		}
+				errorLog(mysqli_errorno($link)." ".mysqli_error($link));
+}
 	    	}
 	    }
     }else{
     	//error to connect to db
     	$status = 500;
     	$error = "error connecting to DB";
+	errorLog(mysqli_errorno($link)." ".mysqli_error($link));
     }
 }
 if($status == 200){
@@ -54,7 +60,8 @@ if($status == 200){
 	$ret["message"] = $return;
 }else{
 	$ret["status"] = $status;
-	$ret["message"] = $error;
+	$ret["message"] = $error." For help, error reference no: $errRef";
+	errorLog($error);
 }
 echo json_encode($ret);
 
