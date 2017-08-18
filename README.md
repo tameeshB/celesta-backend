@@ -1,9 +1,10 @@
 # celesta-backend
-API details:  
+## API details:  
+### Compousloury API Key, send via post as 'apiKey'
 /login   
 * POST  
-⋅⋅*  emailid   
-⋅⋅*  password   
+  *  emailid   
+  *  password   
 * JSON Response:  
 {   
   status: //http status code   
@@ -13,17 +14,17 @@ API details:
   
 /register
 * POST  
-⋅⋅*  name   
-⋅⋅*  emailid   
-⋅⋅*  password   
-⋅⋅*  mobile
-⋅⋅*  college
+  *  name   
+  *  emailid   
+  *  password   
+  *  mobile
+  *  college
 * JSON Response:  
 {   
   status: //http status code   
   message: //message from the server    
-}
-Status code:  
+}   
+Status code:  
   * 200 : successful   
   * 500 : DB connect error   
   * 409 : Duplicate entry for registration
