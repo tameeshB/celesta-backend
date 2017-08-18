@@ -39,7 +39,7 @@ if($status!=400){
 	SQLInjFilter($_POST['mobile']);
 	SQLInjFilter($_POST['emailid']);
 	SQLInjFilter($_POST['college']);
-	SQLInjFilter($_POST['year']);
+	SQLInjFilter($_POST['password']);
 	SQLInjFilter($_POST['name']);
 	//db stuff here
 	$sql = "INSERT INTO `users`(name,email, phone,pswd, college, year) VALUES ('".$_POST['name']."', '".$_POST['emailid']."', '".$_POST['mobile']."', '".sha1($_POST['password'])."', '".$_POST['college']."','1')";
@@ -54,7 +54,7 @@ if($status!=400){
 	    } else {
 	    	//error to fetch result
 	    	$status = 400;
-	    	$error = "error to fetch result ".mysqli_error($link);
+	    	$error = "error to fetch result ".mysqli_errorno($link);
 	    }
 	if(mysqli_errno($link)==1062){
 		$status = 409;
@@ -64,7 +64,7 @@ if($status!=400){
     	//error to connect to db
     	$status = 500;
     	$error = "error connecting to DB";
-	$error.=   "Debugging errno: " . mysqli_connect_errno() . PHP_EOL."Debugging error: " . mysqli_connect_error() . PHP_EOL;
+	$error.=   "Debugging errno: " . mysqli_connect_errno();
     }
 }
 // $status=200;
