@@ -1,5 +1,6 @@
 # celesta-backend
-API details:  
+## API details:  
+### Compousloury API Key, send via post as 'apiKey'
 /login   
 * POST  
 ⋅⋅*  emailid   
