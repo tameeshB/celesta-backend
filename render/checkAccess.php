@@ -1,7 +1,7 @@
 <?php
 	
 	if(isset($_POST['apiKey'])){
-		if($_POST['apiKey']==$apiKey){
+		if(in_array($_POST['apiKey'],$apiKeys)){
 			//all Good
 		}
 		else {

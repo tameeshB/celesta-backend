@@ -1,5 +1,6 @@
 <?php
 include 'dbConfig.php';
+include 'render/checkAccess.php';
 function SQLInjFilter(&$unfilteredString){
 	$unfilteredString = mb_convert_encoding($unfilteredString, 'UTF-8', 'UTF-8');
 	$unfilteredString = htmlentities($unfilteredString, ENT_QUOTES, 'UTF-8');
