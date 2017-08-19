@@ -11,7 +11,7 @@
   userID: //uid of logged in user in case of successful login    
   name : //name   
   college : //college   
-  events: ['event1',event2],
+  events: ['event1',event2],   
   message: //message from the server    
 }   
   
