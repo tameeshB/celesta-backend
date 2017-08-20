@@ -24,18 +24,20 @@ if($status!=400){
 	SQLInjFilter($_POST['mobile']);
 	SQLInjFilter($_POST['password']);
 	//db stuff here
-	$sql = "SELECT `pswd`,`regID`,`name` FROM `users` WHERE `email`= '".$_POST['emailid']."'";
+	$sql = "SELECT `pswd`,`regID`,`name,`college` FROM `users` WHERE `email`= '".$_POST['emailid']."'";
 	if($link =mysqli_connect($servername, $username, $password, $dbname)){
 	$result = mysqli_query($link,$sql);
 	    if(!$result || mysqli_num_rows($result)<1){
 	    	$status=403;
 	    	$return="Invalid credentials. Access Forbidden.";
-		errorLog(mysqli_errorno($link)." ".mysqli_error($link));
+		errorLog(mysqli_errno($link)." ".mysqli_error($link));
 	    } else {
 	    	while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
 	    		if($row['pswd']==sha1($_POST['password'])){
 	    			$status=200;
 	    			$return="Welcome ".$row['name'];
+				$uName=$row['name'];
+				$college=$row['college'];
 				$uID=$row['regID'];
 				$_SESSION['uid']=$uID;
 				$_SESSION['name'] = $row['name'];
@@ -43,7 +45,7 @@ if($status!=400){
 	    		}else{
 	    			$status=403;
 	    			$return="Invalid credentials. Access Forbidden.";	
-				errorLog(mysqli_errorno($link)." ".mysqli_error($link));
+				errorLog(mysqli_errno($link)." ".mysqli_error($link));
 }
 	    	}
 	    }
@@ -51,13 +53,17 @@ if($status!=400){
     	//error to connect to db
     	$status = 500;
     	$error = "error connecting to DB";
-	errorLog(mysqli_errorno($link)." ".mysqli_error($link));
+	errorLog(mysqli_errno($link)." ".mysqli_error($link));
     }
 }
 if($status == 200){
 	$ret["status"] = 200;
 	$ret["userID"] = $uID;
+	$ret["name"]=$uName;
+	$ret["college"]=$college;
+	$ret["events"]=['mayank','chutiya'];
 	$ret["message"] = $return;
+
 }else{
 	$ret["status"] = $status;
 	$ret["message"] = $error." For help, error reference no: $errRef";

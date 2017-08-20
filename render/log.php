@@ -17,9 +17,9 @@ fwrite($handle, $values);
 fclose($handle);
 
 function errorLog($error){
-	$filename = 'logs/errorLog.txt'
-	$finalstring= "\n --------------\n$errRef\t [".$_SERVER['REMOTE_ADDR']."] \n [$date] \n  $error";
-	$handle = fopen($filename, 'a');
-	fwrite($handle, $values);
-	fclose($handle);
+//	$filename = 'logs/errorLog.txt';
+//	$finalstring= "\n --------------\n$errRef\t [".$_SERVER['REMOTE_ADDR']."] \n [$date] \n  $error";
+//	$handle = fopen($filename, 'a');
+//	fwrite($handle, $values);
+//	fclose($handle);
 }
