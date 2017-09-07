@@ -1,5 +1,8 @@
 <?php
-//include 'dbConfig.php';
+include 'dbConfig.php';
+require('resources/PHPMailer/PHPMailerAutoload.php');
+require('defines.php');
+require('emailCredential.php');
 include 'render/checkAccess.php';
 include 'render/log.php';
 function SQLInjFilter(&$unfilteredString){
@@ -52,7 +55,42 @@ if($status!=400){
 	    if($result){
 	    	$status=200;
 	    	$return="Successfully Registered";
-	    	
+		 $sql = "SELECT * FROM users WHERE `email`= '".$_POST['emailid']."'";
+        if($link =mysqli_connect($servername, $username, $password, $dbname)){
+        $result = mysqli_query($link,$sql); $id=0;
+            if($result || mysqli_num_rows($result)>0){
+                while ($row = mysqli_fetch_array($result, MYSQL_ASSOC)) {
+			$id=$row['regID'];
+		}
+	    }}	$mail = new PHPMailer;
+        // 0 = off (for production use)
+        // 1 = client messages
+        // 2 = client and server messages
+        // 3 = verbose debug output
+        $mail->SMTPDebug = 0;
+        $mail->isSMTP();                                      // Set mailer to use SMTP
+        $mail->Host = MAIL_HOST;  // Specify main and backup SMTP servers
+        $mail->SMTPAuth = MAIL_SMTP_AUTH;                               // Enable SMTP authentication
+        $mail->Username = MAIL_USERNAME;                 // SMTP username
+        $mail->Password = MAIL_PASSWORD;                           // SMTP password
+        $mail->SMTPSecure = MAIL_SMTP_SECURE;                            // Enable TLS encryption, `ssl` also accepted
+        $mail->Port = MAIL_PORT;                                    // TCP port to connect to
+        $mail->setFrom($ANWESHA_REG_EMAIL, 'Celesta Web and App Team');
+        $mail->addAddress($_POST['emailid'], $_POST['name']);     // Add a recipient
+        // $mail->addAddress('ellen@example.com');               // Name is optional
+        $mail->addReplyTo($ANWESHA_REG_EMAIL, 'Registration & Planning Team');
+        // $mail->addCC('guptaaditya.13@gmail.com');
+        // $mail->addBCC($ANWESHA_YEAR);
+        // $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
+        // $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name
+        $mail->isHTML(true);                                  // Set email format to HTML
+        $mail->Subject = "Celesta 2017 registration confirmation";
+        $mail->Body    = "Registered!\nHi ".$_POST['name'].",\n Thank you for registering for Celesta'17. Your Registered Id is : TAM$id .\n";
+        $altBody = "Hi name,\nThank you for registering for Celesta'17. Your Registered Id is : TAM$id .\n";
+        $mail->AltBody = $altBody;
+        $mail->send();
+
+
 	    } else {
 	    	//error to fetch result
 	    	$status = 400;
