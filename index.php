@@ -40,6 +40,8 @@ elseif (preg_match($base . 'login?$@', $url, $match)) {
         require ('render/signUpController.php');
 } elseif (preg_match($base . 'cAPI/(.*)$@', $url, $match)) {
 	require ('render/commonAPI.php');
+} elseif (preg_match($base . 'event/([0-9]{2})/([0])|([0-9]{4})/(.*)$@', $url, $match)) {
+	require ('render/eveReg.php');
 } else {
 	http_response_code(404);
 	require ('render/404.php');
