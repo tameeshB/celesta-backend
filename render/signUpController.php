@@ -51,6 +51,7 @@ if($status!=400){
 	$sql = "INSERT INTO `users`(name,email, phone,pswd, college, year) VALUES ('".$_POST['name']."', '".$_POST['emailid']."', '".$_POST['mobile']."', '".sha1($_POST['password'])."', '".$_POST['college']."','1')";
 	//password field absent, otherwise also store sha1($_POST['password'])
 	//assuming table name 'users' as not given in email
+	$id=0;
 	if($link =mysqli_connect($servername, $username, $password, $dbname)){
 	$result = mysqli_query($link,$sql);
 	    if($result){
@@ -90,7 +91,9 @@ if($status!=400){
         $altBody = "Hi name,\nThank you for registering for Celesta'17. Your Registered Id is : TAM$id .\n";
         $mail->AltBody = $altBody;
         $mail->send();
-
+        //send SMS
+        $contents="Thank you for registering for Celesta.\nYour Celesta ID is CEL$id\nWeb Sponsor asaphosting.in";
+        $xml = file_get_contents("http://loginsms.in/api/mt/SendSMS?APIKey=".$APIKey."&senderid=CELSTA&channel=Trans&DCS=0&flashsms=0&number=".$_POST['mobile']."&text=".$contents);
 
 	    } else {
 	    	//error to fetch result
