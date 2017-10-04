@@ -8,6 +8,7 @@ include 'render/log.php';
 function SQLInjFilter(&$unfilteredString){
 		$unfilteredString = mb_convert_encoding($unfilteredString, 'UTF-8', 'UTF-8');
 		$unfilteredString = htmlentities($unfilteredString, ENT_QUOTES, 'UTF-8');
+		// return $unfilteredString;
 }
 $error = "";
 $return = "";
@@ -99,7 +100,12 @@ if($status!=400){
 	    }
 	if(mysqli_errno($link)==1062){
 		$status = 409;
-		$error = "Duplicate entry";
+		if(strpos(mysqli_error($link), 'email') !== false)
+			$error = "Duplicate entry for email ID.";
+		else if(strpos(mysqli_error($link), 'phone') !== false)
+			$error = "Duplicate entry for phone number.";
+		else
+			$error = "Duplicate entry";
 	}
     }else{
     	//error to connect to db
