@@ -6,6 +6,7 @@ $err=0;
 function SQLInjFilter(&$unfilteredString){
 		$unfilteredString = mb_convert_encoding($unfilteredString, 'UTF-8', 'UTF-8');
 		$unfilteredString = htmlentities($unfilteredString, ENT_QUOTES, 'UTF-8');
+		// return $unfilteredString;
 }
 $out="";
 $urlParse = explode("/", $_SERVER['REQUEST_URI']);
@@ -13,10 +14,10 @@ $eveID = $urlParse[3];
 $userID = $urlParse[4];
 $eveName = $urlParse[5];
 $eveName_ = $eveName;
-SQLInjFilter(&$eveID);
-SQLInjFilter(&$userID);
-SQLInjFilter(&$eveID);
-SQLInjFilter(&$eveName_);
+SQLInjFilter($eveID);
+SQLInjFilter($userID);
+SQLInjFilter($eveID);
+SQLInjFilter($eveName_);
 
 $redirURL = "http://".$_SERVER['HTTP_HOST']."/event/".$urlParse[5].".htm";
 if(!isset($_SESSION["uid"]) && $userID == "0"){
